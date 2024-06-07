@@ -4,6 +4,8 @@ import 'package:todo_list_iai/models/task.dart';
 import 'package:todo_list_iai/screens/add_task_screen.dart';
 import 'package:todo_list_iai/services/task_service.dart';
 
+import '../widgets/task_widget.dart';
+
 class TaskScreen extends StatefulWidget {
   const TaskScreen({super.key});
 
@@ -37,7 +39,6 @@ class _TaskScreenState extends State<TaskScreen> {
   //   });
   // }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,7 +47,6 @@ class _TaskScreenState extends State<TaskScreen> {
         centerTitle: true,
       ),
       body: FutureBuilder<bool>(
-
           future: TaskService.getTaskList(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
@@ -58,78 +58,7 @@ class _TaskScreenState extends State<TaskScreen> {
               itemCount: TaskService.tasks.length,
               itemBuilder: (BuildContext context, int index) {
                 Task item = TaskService.tasks[index];
-                return Container(
-                  width: double.infinity,
-                  height: 200,
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  padding: const EdgeInsets.all(20),
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black12,
-                        blurRadius: 5,
-                        spreadRadius: 2,
-                        offset: Offset(0, 2),
-                      ),
-                    ],
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                  ),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            item.titre,
-                            style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            item.date.toString(),
-                            style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                                fontWeight: FontWeight.normal),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        item.description,
-                        style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      const Spacer(),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.check,
-                                color: Colors.green,
-                                size: 30,
-                              )),
-                          IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.delete,
-                                color: Colors.red,
-                                size: 30,
-                              ))
-                        ],
-                      )
-                    ],
-                  ),
-                );
+                return TaskWidget(item: item);
               },
             );
           }),
@@ -137,12 +66,12 @@ class _TaskScreenState extends State<TaskScreen> {
         backgroundColor: Colors.blueAccent,
         onPressed: () {
           // naviger ver autre page
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const AddTaskScreen())).then((value) {
-                setState(() {
-                  
-                });
-              });
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>  AddTaskScreen())).then((value) {
+            setState(() {});
+          });
         },
         child: const Icon(
           Icons.add,

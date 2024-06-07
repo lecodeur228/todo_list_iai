@@ -5,7 +5,8 @@ import 'package:todo_list_iai/models/task.dart';
 import 'package:todo_list_iai/services/task_service.dart';
 
 class AddTaskScreen extends StatefulWidget {
-  const AddTaskScreen({super.key});
+  Task? task = Task(date: DateTime.now(), titre: "", description: "");
+  AddTaskScreen({super.key, this.task});
 
   @override
   State<AddTaskScreen> createState() => _AddTaskScreenState();
@@ -23,7 +24,9 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    dateController = TextEditingController(text: DateTime.now().toString());
+    titleController.text = widget.task!.titre;
+    desciptionController.text = widget.task!.description;
+    dateController = TextEditingController(text: widget.task!.date.toString());
   }
 
   @override
@@ -89,7 +92,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                       labelText: "Date du task",
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8))),
-                  initialValue: '2000-09-20 14:30',
+                  initialValue: DateTime.now().toString(),
                   firstDate: DateTime(2000),
                   lastDate: DateTime(2100),
                   dateLabelText: 'Date',
@@ -105,9 +108,34 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   height: 20,
                 ),
                 // le widget Align pour aligner un element
-                Align(
-                    alignment: Alignment.centerRight,
-                    child: ElevatedButton(
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ElevatedButton(
+                        style: const ButtonStyle(
+                            backgroundColor:
+                                MaterialStatePropertyAll(Colors.redAccent),
+                            foregroundColor:
+                                MaterialStatePropertyAll(Colors.white)),
+                        onPressed: () {
+                          // lors qu'on va clicker sur le button on va s'assurer que tous les champs sont entré
+                          // pour ça il faut utiliser le code suivant
+                          // avec la cle du formualire on va utiliser pour la validation
+
+                          // if (formKey.currentState!.validate()) {
+                          //   // print("formulaire valider");
+                          //   Task task = Task(
+                          //       titre: titleController.text,
+                          //       description: desciptionController.text,
+                          //       date: DateTime.now());
+
+                          //   // print("title : ${task.titre}");
+                          //   TaskService.saveTask(task);
+                          Navigator.of(context).pop();
+                          // } else {}
+                        },
+                        child: const Text("ANNULER")),
+                    ElevatedButton(
                         style: const ButtonStyle(
                             backgroundColor:
                                 MaterialStatePropertyAll(Colors.blueAccent),
@@ -130,7 +158,11 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                             Navigator.of(context).pop();
                           } else {}
                         },
-                        child: const Text("AJOUTER")))
+                        child: widget.task == null
+                            ? const Text("AJOUTER")
+                            : const Text("MODIFIER")),
+                  ],
+                )
               ],
             ),
           ),

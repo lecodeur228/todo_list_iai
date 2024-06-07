@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:todo_list_iai/screens/add_task_screen.dart';
 import 'package:todo_list_iai/screens/task_screen.dart';
 
 void main() {
